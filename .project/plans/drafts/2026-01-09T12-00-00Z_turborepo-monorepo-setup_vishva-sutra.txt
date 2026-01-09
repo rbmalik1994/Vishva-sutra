@@ -8,7 +8,7 @@ Status: draft
 
 --PROMPT:
 
-Scaffold a Turborepo monorepo using pnpm workspaces, TypeScript, React, Tailwind CSS, and a custom Tailwind-based UI package (shadcn-like) with theming and accessibility in mind.
+Scaffold a minimal Turborepo monorepo for a Todo/Notes app using pnpm workspaces, TypeScript, React, Tailwind CSS, and a custom Tailwind-based UI package (shadcn-like) with theming and accessibility in mind.
 
 Overview
 
@@ -17,90 +17,78 @@ Monorepo orchestration: Turborepo.
 Apps: React + Vite apps using TanStack libraries (Router / Query) instead of Next.js.
 UI package: Tailwind-powered library in packages/ui with CSS-variable theming, ThemeProvider, useTheme, and accessible components.
 Shared config: configs/ (tsconfig.base, tailwind base, eslint/prettier).
-Folder layout, commands, validation, and accessibility requirements are explicit.
+Scope: only what is necessary for a Todo/Notes experience (capture, list, edit, persist, theme toggle) with API optionally stubbed for CRUD.
 
-Architecture & Design
+Architecture & Design (Todo/Notes-focused)
 
 - **High-level diagram (textual):**
-	- Clients (web, mobile) → CDN → Edge/Load Balancer → API Gateway → API Services (apps/api) → Datastore(s)
-	- Apps (apps/web, apps/www, apps/admin) import runtime UI from `@vishva-sutra/ui` and call `apps/api` or third-party APIs. `apps/sdk` is used by other apps or third parties to integrate with platform services.
-	- CI/CD → build artifacts cached by Turborepo → deployments to hosting (Vercel/Netlify/Cloud provider) or container registry for API/CLI.
+	- Client (apps/web) → CDN → Edge/Load Balancer → API (apps/api) → datastore (notes/todos table or document store)
+	- Optional: apps/cli for quick capture via terminal; apps/sdk consumed by web/cli to share typed API calls.
 
-- **Components & responsibilities:**
-	- `apps/*`: consumer-facing single-page apps built with Vite + React + TanStack Router/Query. Each app owns routing and presentation.
-	- `packages/ui`: design-system primitives, theming, accessibility, and tokens. Exports named components and theme utilities.
-	- `packages/assets`: shared icons, images, fonts, and design tokens.
-	- `configs/`: centralized build/lint/type configs to enforce consistency.
-	- `apps/api`: stateless HTTP API (Fastify/Express) with clear authentication boundaries.
-	- `apps/sdk`: TypeScript SDK that wraps API clients and enforces typed contracts.
-	- `libs/interfaces`: shared TypeScript interfaces and DTOs for compile-time compatibility.
+- **Components & responsibilities (minimal set):**
+	- `apps/web`: Vite + React + TanStack Router/Query single-page app for listing/creating/updating notes/todos, theme toggle.
+	- `apps/api` (optional but recommended): small Fastify/Express service exposing CRUD endpoints for notes/todos; stateless; validates input.
+	- `apps/cli` (optional): Node + TypeScript CLI that calls `apps/api` or local storage for quick capture.
+	- `packages/ui`: design system primitives (Button, Input/Textarea, Card, Modal/Sheet), theme utilities, focus-visible styles.
+	- `packages/assets`: shared icons/fonts (optional, only if used by UI).
+	- `configs/`: centralized tsconfig/tailwind/postcss/eslint.
+	- `libs/interfaces`: shared DTOs/types for notes/todos between API, SDK, and web.
+	- `apps/sdk`: thin typed client for the API (fetch wrapper) reused by web/cli.
 
-- **Data flow:**
-	1. User visits `apps/web`; assets served from CDN.
-	2. App requests data (TanStack Query) from `apps/api` via fetch; SDK may be used for convenience.
-	3. API validates, enforces auth, reads/writes to datastore and returns JSON.
-	4. UI renders data using accessible components from `packages/ui` and persists user theme preference to `localStorage`.
+- **Data flow (Todo/Notes):**
+	1. User opens `apps/web`; app loads theme preference from localStorage (pre-hydration inline script sets data-theme).
+	2. Web app fetches notes/todos via SDK → API; TanStack Query caches results and handles mutations.
+	3. API validates and persists to datastore (can start with in-memory or file-based for scaffold).
+	4. UI renders list, filters, and detail; uses accessible controls with focus states and ARIA labels.
 
-- **Technology choices & rationale:**
-	- Vite + React: fast dev feedback and small bundles for client apps.
-	- TanStack Router + Query: flexible client routing and data management (no SSR requirement).
-	- Turborepo + pnpm: fast monorepo caching and deterministic installs.
-	- TypeScript 5.x: strong typing and cross-package compatibility with project references.
-	- Tailwind + CSS variables: fast styling and framework-agnostic theming.
+- **Technology choices & rationale (kept minimal):**
+	- Vite + React for fast DX and small bundles.
+	- TanStack Router + Query for client routing/state; no SSR needed.
+	- Turborepo + pnpm for workspace orchestration and caching.
+	- Tailwind + CSS variables for theming without locking to a framework.
+	- Optional API to enable persistence beyond localStorage; start with stub for scaffold.
 
-- **Deployment & infra guidance:**
-	- Static apps: deploy to a CDN-backed host (Netlify, Vercel, Cloudflare Pages) with build pipeline from Turborepo artifacts.
-	- API services: containerize (Docker) and deploy to managed Kubernetes, Cloud Run, or serverless containers.
-	- Use a reverse-proxy and API gateway that centralizes auth and rate-limiting.
+- **Deployment & infra (minimal path):**
+	- Deploy `apps/web` as static assets to CDN-backed host (Netlify/Vercel/Cloudflare Pages).
+	- If `apps/api` is used, containerize and deploy to a small serverless/container runtime; keep stateless.
 
-- **Scalability & resilience:**
-	- Make API stateless; scale horizontally behind a load balancer.
-	- Use caching (CDN + Redis) for read-heavy endpoints.
-	- Use health checks, circuit breakers, and retry policies for downstream dependencies.
+- **Security & data handling (focused):**
+	- No secrets in repo; use env vars for API keys.
+	- Input validation on API for note/todo content and IDs; sanitize user input for display.
 
-- **Security & secrets:**
-	- Never store secrets in repo. Use environment variables or a secrets manager.
-	- Enforce input validation and parameterized queries at API layer.
-	- Use HTTPS everywhere and secure cookie attributes (SameSite, HttpOnly, Secure).
-
-- **Observability:**
-	- Ship metrics (Prometheus compatible), logs (structured JSON), and traces (OpenTelemetry) from API services.
-	- Add synthetic tests and uptime checks in CI.
+- **Observability (lightweight):**
+	- Basic request logging in API; optional metrics stub.
 
 - **Implementation roadmap (phases):**
-	1. Init repo: root `package.json`, `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.base.json`, `configs/` skeleton.
-	2. Create `packages/ui` minimal theme + Button + build pipeline.
-	3. Scaffold `apps/web` and `apps/www` with Vite, integrate `packages/ui` and theme toggle.
-	4. Add `apps/api` minimal authenticated endpoint and `apps/sdk` wrapper.
-	5. Add CI, tests (Vitest), and linting; run end-to-end validation.
-	6. Harden deployment, infra, and observability.
+	1) Init repo: root manifests (`package.json`, `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.base.json`), `configs/` skeleton.
+	2) Build `packages/ui` (Button, Input/Textarea, Card, Modal) + theming + focus-visible.
+	3) Scaffold `apps/web` with note/todo list + create/edit flows; integrate theme toggle and skip link.
+	4) Optional: scaffold `apps/api` CRUD stub + `apps/sdk` fetch wrapper; wire web to SDK.
+	5) Tests/lint/CI; minimal Vitest examples for `packages/ui` Button keyboard activation.
 
-- **Decision records & tradeoffs:**
-	- Prefer client-side rendering (Vite) for simplicity and speed; tradeoff: no built-in SSR—if SSR required later, plan migration.
-	- Use CSS variables for theming (interop) vs heavy theming frameworks—smaller runtime and easier overrides.
+- **Decision records & tradeoffs (kept):**
+	- Client-only rendering accepted for speed; can add API later for multi-device sync.
+	- CSS variables over heavier theming libs to keep bundle small and cross-platform.
 
-Workspace layout (must reflect this structure)
+Workspace layout (Todo/Notes minimal, placeholders optional)
 
 apps/
-web/ — main web application (React + Vite + TanStack Router/Query)
-www/ — landing page (React + Vite)
-mobile/ — other web/mobile web app (React)
-cli/ — CLI app (Node + TypeScript)
-api/ — API server (Node/Express or Fastify + TypeScript)
-admin/ — admin panel (React + Vite)
-sdk/ — SDK package to connect apps
-SubApps/ — placeholder for additional sub-apps
-configs/ — shared configuration files (tsconfig.base.json, tailwind.shared.js, eslint, etc.)
-docs/ — documentation
-libs/ — shared libraries (e.g., interfaces/)
-tools/ — tooling scripts/utilities
-extensions/ — app-specific extensions
+	web/      — main todo/notes SPA (React + Vite + TanStack Router/Query)
+	api/      — optional CRUD API (Fastify/Express + TS)
+	cli/      — optional capture CLI
+	sdk/      — optional typed SDK for API
+	SubApps/  — optional future sub-apps
+configs/    — shared configuration files (tsconfig.base.json, tailwind.shared.js, eslint, etc.)
+docs/       — documentation (keep minimal)
+libs/       — shared libraries (e.g., interfaces/)
+tools/      — tooling scripts/utilities (only if needed)
+extensions/ — app-specific extensions (optional)
 packages/
-assets/ — UI assets
-ui/ — UI component library (the shadcn-like package)
-interface/ — shared TypeScript interfaces (if needed)
-scripts/ — utility scripts for repo setup and management
-.github/ — CI/workflow stubs
+	assets/   — UI assets (only if used)
+	ui/       — UI component library (the shadcn-like package)
+	interface/— shared TypeScript interfaces (if needed)
+scripts/    — utility scripts for repo setup/management (keep lean)
+.github/    — CI/workflow stubs (optional minimal CI)
 package.json (root) + turbo.json + pnpm-workspace.yaml + tsconfig.base.json
 Constraints & requirements
 
@@ -124,31 +112,26 @@ pnpm-workspace.yaml: include apps/*, packages/*, configs/*, libs/*, tools/*
 turbo.json: pipeline that caches builds, runs build in packages before apps, dev runs apps in parallel
 tsconfig.base.json: base config with paths mapping @vishva-sutra/ui to packages/ui/src
 Shared config files under configs/ (Tailwind shared, PostCSS, ESLint)
-Apps (Vite + TanStack) requirements
+Apps (Vite + TanStack) requirements — minimal todo/notes
 
-apps/* apps use Vite + React + TypeScript templates.
-Use TanStack Router for client routing and TanStack Query for data hooks.
-Each app must have:
-package.json with dev, build, preview, lint, typecheck
-vite.config.ts, index.html, src/main.tsx, src/App.tsx
-tailwind.config.cjs that imports shared config from configs/tailwind.shared.cjs or require relative path
-postcss.config.cjs referencing Tailwind and autoprefixer
-Implement a global skip-to-main link in apps (visible on focus).
-Provide an example page in apps/web demonstrating:
-Import and usage of @vishva-sutra/ui Button
-Theme toggle (light/dark + accent selection) that persists
-packages/ui (UI library) requirements
+- apps/web: Vite + React + TypeScript template; TanStack Router for routes, TanStack Query for CRUD data.
+- Each app must have: package.json with dev, build, preview, lint, typecheck; vite.config.ts; index.html; src/main.tsx; src/App.tsx.
+- tailwind.config.cjs should import shared config from configs/tailwind.shared.cjs (or require relative path).
+- postcss.config.cjs referencing Tailwind and autoprefixer.
+- Implement a global skip-to-main link (visible on focus) and focus-visible styles.
+- Example in apps/web: list of todos/notes, add/edit form, uses @vishva-sutra/ui Button/Input/Card, theme toggle persists (localStorage + pre-hydration inline script).
+packages/ui (UI library) requirements — minimal set
 
-TypeScript package with:
-packages/ui/package.json with name: @vishva-sutra/ui, exports, types, build script (tsc --build or tsup suggestion)
-src/index.ts exporting named components and types
-src/components/Button.tsx, Input.tsx, Card.tsx, Modal.tsx (minimal accessible implementations)
-src/theme/ThemeProvider.tsx, useTheme.ts implementing CSS-variable theming and localStorage persistence and pre-hydration snippet suggestion
-Accessibility requirements for components:
-keyboard operable, ARIA attributes when necessary, focus ring styles that meet contrast guidelines, don't use color alone to convey state
-Theming:
-Provide CSS variable tokens and Tailwind integration so apps can override variables
-Expose a minimal API for theme switching and a server-friendly pre-hydration script pattern
+- TypeScript package with:
+	- packages/ui/package.json with name: @vishva-sutra/ui, exports, types, build script (tsc --build or tsup suggestion)
+	- src/index.ts exporting named components and types
+	- src/components/Button.tsx, Input.tsx (or Textarea), Card.tsx, Modal.tsx (minimal accessible implementations)
+	- src/theme/ThemeProvider.tsx, useTheme.ts implementing CSS-variable theming and localStorage persistence and pre-hydration inline script guidance
+- Accessibility requirements:
+	- Keyboard operable, ARIA attributes when necessary, focus ring styles that meet contrast guidelines, don't use color alone to convey state
+- Theming:
+	- Provide CSS variable tokens and Tailwind integration so apps can override variables
+	- Expose a minimal API for theme switching and a server-friendly pre-hydration script pattern
 configs (shared configs) requirements
 
 configs/tailwind.shared.cjs or tailwind.config.js exporting theme tokens and accessible color palettes
