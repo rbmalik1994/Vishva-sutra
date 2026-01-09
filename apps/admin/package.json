@@ -1,0 +1,11 @@
+{
+  "name": "@vishva-sutra/admin",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: admin'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/admin build placeholder'",
+    "lint": "echo 'apps/admin lint placeholder'",
+    "typecheck": "echo 'apps/admin typecheck placeholder'"
+  }
+}

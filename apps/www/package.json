@@ -1,0 +1,11 @@
+{
+  "name": "@vishva-sutra/www",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: www'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/www build placeholder'",
+    "lint": "echo 'apps/www lint placeholder'",
+    "typecheck": "echo 'apps/www typecheck placeholder'"
+  }
+}

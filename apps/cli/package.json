@@ -1,0 +1,12 @@
+{
+  "name": "@vishva-sutra/cli",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: cli'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/cli build placeholder'",
+    "lint": "echo 'apps/cli lint placeholder'",
+    "typecheck": "echo 'apps/cli typecheck placeholder'"
+  }
+}

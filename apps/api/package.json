@@ -1,0 +1,12 @@
+{
+  "name": "@vishva-sutra/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: api'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/api build placeholder'",
+    "lint": "echo 'apps/api lint placeholder'",
+    "typecheck": "echo 'apps/api typecheck placeholder'"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@vishva-sutra/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: mobile'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/mobile build placeholder'",
+    "lint": "echo 'apps/mobile lint placeholder'",
+    "typecheck": "echo 'apps/mobile typecheck placeholder'"
+  }
+}

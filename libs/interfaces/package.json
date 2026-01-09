@@ -1,0 +1,24 @@
+{
+  "name": "@vishva-sutra/interfaces",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src --ext .ts --config ../../configs/eslint.config.cjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "echo 'Add interface tests as needed'"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@vishva-sutra/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node -e \"console.log('Starting placeholder service: sdk'); setInterval(()=>{}, 1e9)\"",
+    "build": "echo 'apps/sdk build placeholder'",
+    "lint": "echo 'apps/sdk lint placeholder'",
+    "typecheck": "echo 'apps/sdk typecheck placeholder'"
+  }
+}
