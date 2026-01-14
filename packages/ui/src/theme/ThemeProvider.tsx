@@ -5,7 +5,7 @@ type Theme = 'light' | 'dark' | 'system';
 type ThemeContextValue = {
   theme: Theme;
   resolvedTheme: 'light' | 'dark';
-  setTheme: (value: Theme) => void;
+  setTheme: React.Dispatch<React.SetStateAction<Theme>>;
   toggleTheme: () => void;
 };
 
@@ -62,11 +62,14 @@ export const ThemeProvider: React.FC<{
   }, [theme, storageKey]);
 
   const setTheme = useCallback(
-    (value: Theme) => {
-      setThemeState(value);
-      const system = getSystemTheme();
-      setResolvedTheme(value === 'system' ? system : value);
-      applyTheme(value, storageKey);
+    (value: React.SetStateAction<Theme>) => {
+      setThemeState((prev) => {
+        const next: Theme = typeof value === 'function' ? (value as (p: Theme) => Theme)(prev) : value;
+        const system = getSystemTheme();
+        setResolvedTheme(next === 'system' ? system : next);
+        applyTheme(next, storageKey);
+        return next;
+      });
     },
     [storageKey]
   );
