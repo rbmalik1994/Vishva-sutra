@@ -1,0 +1,2 @@
+PKG_MANAGER=npm
+MONOREPO=none

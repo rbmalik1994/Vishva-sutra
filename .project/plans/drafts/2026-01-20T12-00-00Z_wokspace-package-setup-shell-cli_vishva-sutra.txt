@@ -1,0 +1,124 @@
+Prompt-Name: workspace-package-builder
+Project: Vishva-sutra
+Author: GitHub Copilot
+Created-At: 2026-01-20T12:00:00Z
+Sources: repository layout, standard CLI patterns
+Version: 0.2
+Status: improved-draft
+
+Overview
+--------
+This document defines an improved prompt to generate a modular, POSIX-friendly interactive
+shell project named "workspace-package-builder". The prompt describes the intended features,
+file structure, UX flows, safety rules, and acceptance criteria so you (or an LLM) can generate
+the implementation later.
+
+Goal
+----
+Create a modular interactive CLI in `scripts/workspace-package-builder/` that scaffolds
+monorepo-style workspaces, packages, and apps. The CLI must be accessible, idempotent, and
+safe — suitable for running locally on developer machines (Linux/macOS).
+
+Output (required files)
+-----------------------
+- `main.sh` — entrypoint that sources modules and runs the interactive flow
+- `utils.sh` — prompting, logging, and helper functions
+- `init_workspace.sh` — workspace-level setup flows (folders, .gitignore, README, git init)
+- `package_manager.sh` — package manager selection and persistent variable
+- `monorepo.sh` — create minimal workspace config for pnpm/yarn/npm/lerna/turbo/nx
+- `create_package.sh` — create individual packages/apps per selected stack
+- `tooling.sh` — add lint/format/CI placeholders (ESLint, Prettier, Black, GitHub Actions)
+- `prompt.txt` — the improved LLM prompt (this file) for future regeneration
+- `README.md` — short usage + examples
+
+Design principles
+-----------------
+- Single-responsibility modules: each file exposes functions and is safe to `source` from
+  `main.sh`.
+- Minimal external deps: avoid jq, yq, or other non-standard tools; if needed, prompt
+  before using them.
+- Idempotent operations: detect existing files/folders and skip or prompt to overwrite.
+- Accessible prompts: numbered choices, clear defaults, and keyboard-friendly inputs.
+- Dry-run & confirmation: print commands that will run (especially network/package installs)
+  and require explicit confirmation before executing.
+
+Interactive flows (user-facing)
+------------------------------
+1. Initialize workspace
+   - Ask root folder (default .), create `.gitignore` and optional `README.md`, ask to
+     initialize git (skip if `.git` exists).
+2. Choose package manager
+   - Offer: `npm`, `yarn`, `pnpm`, `pip` (python), `cargo` (rust), `apt` (system). Store
+     selection in `PKG_MANAGER` for later.
+3. Configure monorepo workspaces (optional)
+   - Offer workspace flavors: `pnpm`, `yarn`, `npm`, `lerna`, `turbo`, `nx` and create
+     minimal config files (e.g., `pnpm-workspace.yaml`, `package.json` workspaces,
+     `lerna.json`, `turbo.json`). For complex generators (nx), provide instructions
+     rather than auto-generate.
+4. Create folders and packages/apps
+   - Ask how many packages/apps to create.
+   - For each: name, relative path (default `packages/` or `apps/`), stack (React/Node/Rust/Python/Go/Static).
+   - Run minimal initialization where possible: `npm init -y`, `cargo new`, `python -m venv`.
+5. Add tooling (optional)
+   - ESLint, Prettier, Black, TypeScript config, and a GitHub Actions CI stub.
+6. Final summary + next steps
+   - Print created files, recommend `git add`/`commit`, and show package manager commands.
+
+Implementation details for each module
+-------------------------------------
+- `utils.sh`:
+  - `info()`, `warn()`, `ok()` colored outputs
+  - `confirm(prompt, default)` returns 0 if yes
+  - `choose(prompt, options...)` prints numbered options and returns the numeric choice
+  - `ensure_dir(path)` safely creates directories
+- `init_workspace.sh`:
+  - `init_workspace()` implements flow #1 and writes `.gitignore` only if missing
+- `package_manager.sh`:
+  - `package_manager_flow()` sets `PKG_MANAGER`
+- `monorepo.sh`:
+  - `monorepo_flow()` sets `MONOREPO` and writes minimal config files for selected flavor
+- `create_package.sh`:
+  - `create_package_or_app()` prompts for name/location/stack and performs safe init
+- `tooling.sh`:
+  - `tooling_flow()` offers to add lint/format/CI placeholders
+
+Safety, validation & testing
+----------------------------
+- Dry-run: any operation that will run `install` or network commands must be listed first and
+  require confirmation.
+- Non-destructive by default: avoid overwriting files without explicit consent.
+- Idempotency: use checks like `if [ -f X ]` and `if [ -d .git ]` to avoid duplicate work.
+- Basic validation: ensure names are non-empty and path segments are sane (no absolute paths
+  unless explicitly requested).
+
+Examples (concise)
+------------------
+Sequence the CLI should present (example):
+1) "Initialize workspace? (Y/n)"
+2) "Choose package manager: 1) npm  2) yarn  3) pnpm  4) pip  5) cargo"
+3) "Monorepo: 1) No 2) pnpm 3) yarn 4) npm 5) lerna 6) turbo 7) nx"
+4) "How many packages/apps to create?" -> 2
+5) For each package: "Name:" "Relative path [packages/]" "Stack: 1) React 2) Node 3) Rust 4) Python 5) Go"
+6) Print planned commands (dry-run) and ask: "Proceed with initialization and installs?" (Y/n)
+
+Acceptance criteria
+-------------------
+- The prompt is complete and prescriptive enough that an LLM or developer can implement the
+  modular scripts without additional clarification.
+- Generated scripts are runnable on a default Linux dev box with `bash` and create the
+  requested files/folders in a fresh directory.
+
+What I added in this improved prompt
+-----------------------------------
+- Clear goal, output file list, design principles, and module-level API descriptions.
+- Added `turbo` and `nx` as additional monorepo options and clarified how to handle
+  generators that require external tooling.
+- Emphasized dry-run safety, idempotency, and accessibility (numbered prompts).
+- Included a concise example sequence and acceptance criteria for testing.
+
+Notes & next steps
+------------------
+- Use this `prompt.txt` as the authoritative spec when implementing `scripts/workspace-package-builder/`.
+- When you are ready, run the scaffold locally (make `main.sh` executable) and test in a
+  temporary directory. If you want, I can run a smoke test and report back.
+
