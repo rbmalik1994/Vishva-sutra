@@ -1,0 +1,458 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Modern theme (default) - Clean, minimal, shadcn-inspired */
+  :root,
+  [data-theme="modern"],
+  [data-theme="modern-light"] {
+    /* Color tokens in HSL format for flexibility */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    
+    /* Border radius tokens */
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    
+    /* Spacing tokens */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    
+    /* Typography tokens */
+    --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-display: 'Inter', system-ui, sans-serif;
+    
+    /* Shadow tokens */
+    --shadow-elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-elevation-2: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-elevation-3: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-elevation-4: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-glow: 0 0 0 3px hsl(var(--ring) / 0.2);
+    --shadow-glow-lg: 0 0 0 4px hsl(var(--ring) / 0.3);
+    
+    /* Blur tokens */
+    --blur-glass: 8px;
+  }
+
+  /* Modern dark theme */
+  .dark,
+  [data-theme="dark"],
+  [data-theme="modern-dark"] {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --success: 142 70% 45%;
+    --success-foreground: 210 40% 98%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 222.2 84% 4.9%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+
+  /* Cyberpunk theme - Neon accents, dark backgrounds */
+  [data-theme="cyberpunk"] {
+    --background: 260 20% 6%;
+    --foreground: 180 100% 90%;
+    
+    --card: 260 25% 10%;
+    --card-foreground: 180 100% 90%;
+    
+    --popover: 260 25% 8%;
+    --popover-foreground: 180 100% 90%;
+    
+    --primary: 160 100% 50%;
+    --primary-foreground: 260 20% 6%;
+    
+    --secondary: 300 100% 60%;
+    --secondary-foreground: 260 20% 6%;
+    
+    --muted: 260 20% 15%;
+    --muted-foreground: 180 50% 60%;
+    
+    --accent: 320 100% 60%;
+    --accent-foreground: 260 20% 6%;
+    
+    --destructive: 350 100% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 160 100% 50%;
+    --success-foreground: 260 20% 6%;
+    
+    --warning: 45 100% 50%;
+    --warning-foreground: 260 20% 6%;
+    
+    --border: 260 40% 25%;
+    --input: 260 30% 20%;
+    --ring: 160 100% 50%;
+    
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0.25rem;
+    --radius-2xl: 0.5rem;
+    
+    --font-sans: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+    --font-mono: 'Share Tech Mono', 'Fira Code', monospace;
+    --font-display: 'Orbitron', system-ui, sans-serif;
+    
+    --shadow-elevation-1: 0 0 5px hsl(160 100% 50% / 0.2);
+    --shadow-elevation-2: 0 0 10px hsl(160 100% 50% / 0.3);
+    --shadow-elevation-3: 0 0 20px hsl(160 100% 50% / 0.4);
+    --shadow-elevation-4: 0 0 30px hsl(160 100% 50% / 0.5);
+    --shadow-glow: 0 0 15px hsl(160 100% 50% / 0.5);
+    --shadow-glow-lg: 0 0 30px hsl(160 100% 50% / 0.7);
+  }
+
+  /* Retro theme - TUI/GUI inspired vintage styles */
+  [data-theme="retro"] {
+    --background: 60 30% 96%;
+    --foreground: 0 0% 0%;
+    
+    --card: 60 40% 94%;
+    --card-foreground: 0 0% 0%;
+    
+    --popover: 60 30% 96%;
+    --popover-foreground: 0 0% 0%;
+    
+    --primary: 220 70% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 85%;
+    --secondary-foreground: 0 0% 0%;
+    
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 30%;
+    
+    --accent: 120 60% 35%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 80% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 120 60% 35%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 100% 45%;
+    --warning-foreground: 0 0% 0%;
+    
+    --border: 0 0% 70%;
+    --input: 60 30% 96%;
+    --ring: 220 70% 50%;
+    
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    
+    --font-sans: 'IBM Plex Sans', 'Chicago', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Monaco', monospace;
+    --font-display: 'VT323', 'IBM Plex Sans', monospace;
+    
+    --shadow-elevation-1: 2px 2px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-2: 3px 3px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-3: 4px 4px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-4: 6px 6px 0 0 rgb(0 0 0 / 1);
+    --shadow-glow: 2px 2px 0 0 rgb(0 0 0 / 1);
+    --shadow-glow-lg: 4px 4px 0 0 rgb(0 0 0 / 1);
+  }
+
+  /* Apple Liquid theme - Translucent, glass-like surfaces */
+  [data-theme="liquid"],
+  [data-theme="liquid-light"] {
+    --background: 220 20% 97%;
+    --foreground: 220 20% 10%;
+    
+    --card: 0 0% 100% / 0.7;
+    --card-foreground: 220 20% 10%;
+    
+    --popover: 0 0% 100% / 0.85;
+    --popover-foreground: 220 20% 10%;
+    
+    --primary: 211 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 220 10% 95%;
+    --secondary-foreground: 220 20% 10%;
+    
+    --muted: 220 10% 93%;
+    --muted-foreground: 220 10% 45%;
+    
+    --accent: 280 80% 60%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 80% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 95% 55%;
+    --warning-foreground: 220 20% 10%;
+    
+    --border: 220 15% 90%;
+    --input: 0 0% 100% / 0.5;
+    --ring: 211 100% 50%;
+    
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 1.5rem;
+    
+    --font-sans: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'SF Mono', 'Menlo', monospace;
+    --font-display: 'SF Pro Display', -apple-system, sans-serif;
+    
+    --shadow-elevation-1: 0 1px 3px rgb(0 0 0 / 0.08);
+    --shadow-elevation-2: 0 4px 12px rgb(0 0 0 / 0.1);
+    --shadow-elevation-3: 0 8px 24px rgb(0 0 0 / 0.12);
+    --shadow-elevation-4: 0 16px 48px rgb(0 0 0 / 0.15);
+    --shadow-glow: 0 0 0 4px hsl(211 100% 50% / 0.2);
+    --shadow-glow-lg: 0 0 0 6px hsl(211 100% 50% / 0.3);
+    
+    --blur-glass: 20px;
+  }
+
+  /* Apple Liquid Dark */
+  [data-theme="liquid-dark"] {
+    --background: 220 15% 8%;
+    --foreground: 220 10% 95%;
+    
+    --card: 220 15% 12% / 0.7;
+    --card-foreground: 220 10% 95%;
+    
+    --popover: 220 15% 10% / 0.9;
+    --popover-foreground: 220 10% 95%;
+    
+    --primary: 211 100% 55%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 220 10% 95%;
+    
+    --muted: 220 15% 16%;
+    --muted-foreground: 220 10% 60%;
+    
+    --accent: 280 80% 65%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 142 70% 50%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 95% 60%;
+    --warning-foreground: 220 15% 8%;
+    
+    --border: 220 15% 20%;
+    --input: 220 15% 15% / 0.6;
+    --ring: 211 100% 55%;
+    
+    --blur-glass: 24px;
+  }
+
+  /* Brutalist theme - Raw, high-contrast, grid-driven */
+  [data-theme="brutalist"] {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 0%;
+    
+    --muted: 0 0% 90%;
+    --muted-foreground: 0 0% 40%;
+    
+    --accent: 0 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --success: 0 0% 0%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 45 100% 50%;
+    --warning-foreground: 0 0% 0%;
+    
+    --border: 0 0% 0%;
+    --input: 0 0% 100%;
+    --ring: 0 0% 0%;
+    
+    --radius-sm: 0;
+    --radius-md: 0;
+    --radius-lg: 0;
+    --radius-xl: 0;
+    --radius-2xl: 0;
+    
+    --font-sans: 'Space Grotesk', 'Archivo Black', system-ui, sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-display: 'Archivo Black', 'Space Grotesk', sans-serif;
+    
+    --shadow-elevation-1: 4px 4px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-2: 6px 6px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-3: 8px 8px 0 0 rgb(0 0 0 / 1);
+    --shadow-elevation-4: 12px 12px 0 0 rgb(0 0 0 / 1);
+    --shadow-glow: 4px 4px 0 0 rgb(0 0 0 / 1);
+    --shadow-glow-lg: 8px 8px 0 0 rgb(0 0 0 / 1);
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+  }
+}
+
+@layer components {
+  /* Focus ring utility for accessibility */
+  .focus-ring {
+    @apply outline-none ring-offset-2 ring-offset-background focus-visible:ring-2 focus-visible:ring-ring;
+  }
+
+  /* Glass effect for liquid theme */
+  .glass {
+    backdrop-filter: blur(var(--blur-glass));
+    -webkit-backdrop-filter: blur(var(--blur-glass));
+  }
+
+  /* Screen reader only */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Skip link for accessibility */
+  .skip-link {
+    @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md;
+  }
+}
+
+@layer utilities {
+  /* Text balance for better typography */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animation utilities */
+  .animate-in {
+    animation-name: animate-in;
+    animation-duration: 150ms;
+    animation-timing-function: ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  .animate-out {
+    animation-name: animate-out;
+    animation-duration: 150ms;
+    animation-timing-function: ease-in;
+    animation-fill-mode: forwards;
+  }
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes animate-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+  }
+}
