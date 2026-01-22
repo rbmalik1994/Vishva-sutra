@@ -84,6 +84,10 @@ main() {
     count=""
     while :; do
       count=$(prompt_input "How many packages/apps to create?" "0")
+      if [ -z "$count" ]; then
+        count="0"
+        break
+      fi
       case $count in
         *[!0-9]*) warn "Enter a numeric value." ;;
         *) break ;;

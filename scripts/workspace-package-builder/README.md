@@ -17,6 +17,16 @@ post_date: 2026-01-20
 workspace-package-builder is a POSIX-compatible, interactive CLI that scaffolds
 monorepo-style workspaces, packages, and apps with safe, idempotent prompts.
 
+## Recent Fixes (2026-01-22)
+
+- Fixed I/O redirection: all prompts now write to stderr, function returns use stdout
+- Fixed `prompt_input`, `choose`, and `confirm` functions to properly handle input/output
+- Fixed color output to only appear on terminals
+- Fixed numeric input validation
+- Improved error handling and edge cases
+
+See [CHANGELOG.md](CHANGELOG.md) for complete details.
+
 ## Usage
 
 - Run the entrypoint:
@@ -42,8 +52,16 @@ operation that could perform installs or network actions.
 
 ## Testing
 
-A small idempotency script is available at:
-- scripts/workspace-package-builder/test-idempotency.sh
+Integration and idempotency test scripts are available:
+- [integration-test.sh](integration-test.sh) - Full workflow testing
+- [test-idempotency.sh](test-idempotency.sh) - Validates repeated runs are safe
 
-Run it to validate that repeated runs are safe and do not overwrite existing
-files without confirmation.
+Run integration tests:
+```bash
+./integration-test.sh
+```
+
+Run idempotency tests:
+```bash
+./test-idempotency.sh
+```

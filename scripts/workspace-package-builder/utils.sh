@@ -2,7 +2,7 @@
 # Shared helpers for workspace-package-builder.
 
 init_colors() {
-  if [ -t 1 ] && [ -z "${NO_COLOR:-}" ]; then
+  if [ -t 2 ] && [ -z "${NO_COLOR:-}" ]; then
     COLOR_INFO="\033[1;34m"
     COLOR_WARN="\033[1;33m"
     COLOR_OK="\033[1;32m"
@@ -32,7 +32,7 @@ log_msg() {
   if [ "$QUIET" -eq 1 ] && [ "$level" != "ERROR" ]; then
     return 0
   fi
-  printf "%s%s%s\n" "$color" "$*" "$COLOR_RESET"
+  printf "%s%s%s\n" "$color" "$*" "$COLOR_RESET" >&2
 }
 
 info() { log_msg "INFO" "$COLOR_INFO" "$@"; }
@@ -70,7 +70,7 @@ confirm() {
   esac
 
   while :; do
-    printf "%s (%s) " "$prompt" "$suffix"
+    printf "%s (%s) " "$prompt" "$suffix" >&2
     IFS= read -r answer || return 1
     check_quit "$answer"
     if [ -z "$answer" ]; then
@@ -95,18 +95,21 @@ choose() {
   info "$prompt"
   i=1
   for opt in "$@"; do
-    printf "  %s) %s\n" "$i" "$opt"
+    printf "  %s) %s\n" "$i" "$opt" >&2
     i=$((i + 1))
   done
   while :; do
-    printf "Select an option [1-%s] (default 1): " "$options_count"
+    printf "Select an option [1-%s] (default 1): " "$options_count" >&2
     IFS= read -r answer || return 1
     check_quit "$answer"
     if [ -z "$answer" ]; then
-      answer=1
+      printf "1"
+      return 0
     fi
     case $answer in
-      *[!0-9]*|"") warn "Enter a number between 1 and $options_count." ;;
+      *[!0-9]*)
+        warn "Enter a number between 1 and $options_count."
+        ;;
       *)
         if [ "$answer" -ge 1 ] && [ "$answer" -le "$options_count" ]; then
           printf "%s" "$answer"
@@ -123,9 +126,9 @@ prompt_input() {
   default=${2:-}
   while :; do
     if [ -n "$default" ]; then
-      printf "%s [%s]: " "$label" "$default"
+      printf "%s [%s]: " "$label" "$default" >&2
     else
-      printf "%s: " "$label"
+      printf "%s: " "$label" >&2
     fi
     IFS= read -r answer || return 1
     check_quit "$answer"
@@ -188,7 +191,7 @@ summarize_actions() {
     return 0
   fi
   info "Summary of actions:"
-  printf "%s" "$ACTION_LOG"
+  printf "%s" "$ACTION_LOG" >&2
 }
 
 command_exists() {
