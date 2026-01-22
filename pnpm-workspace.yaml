@@ -1,0 +1,7 @@
+packages:
+  - "apps/*"
+  - "apps/SubApps/*"
+  - "packages/*"
+  - "core/*"
+  - "tools/*"
+  - "extensions/*"

@@ -1,3 +1,59 @@
-node_modules
-dist
-.turbo
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.turbo/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Environment variables
+.env
+.env*.local
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS
+.DS_Store
+*.swp
+*.swo
+*~
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# TypeScript
+*.tsbuildinfo
+
+# Package manager files
+.pnpm-debug.log
+.yarn/
+
+# Misc
+*.pem
+.eslintcache
