@@ -12,7 +12,7 @@ write_json_file() {
     dry_run_print "create $target"
     return 0
   fi
-  printf "%s\n" "$content" > "$target"
+  printf "%b\n" "$content" > "$target"
   add_action "Created file: $target"
   ok "Created $target"
 }
@@ -28,7 +28,7 @@ write_text_file() {
     dry_run_print "create $target"
     return 0
   fi
-  printf "%s\n" "$content" > "$target"
+  printf "%b\n" "$content" > "$target"
   add_action "Created file: $target"
   ok "Created $target"
 }
@@ -77,7 +77,7 @@ monorepo_flow() {
       write_json_file "$root/lerna.json" "{\n  \"version\": \"0.0.0\",\n  \"packages\": [\n    \"packages/*\",\n    \"apps/*\"\n  ]\n}"
       ;;
     turbo)
-      write_json_file "$root/turbo.json" "{\n  \"\\$schema\": \"https://turbo.build/schema.json\",\n  \"pipeline\": {\n    \"build\": {\n      \"dependsOn\": [\"^build\"],\n      \"outputs\": [\"dist/**\", \"build/**\"]\n    }\n  }\n}"
+      write_json_file "$root/turbo.json" "{\n  \"\$schema\": \"https://turbo.build/schema.json\",\n  \"pipeline\": {\n    \"build\": {\n      \"dependsOn\": [\"^build\"],\n      \"outputs\": [\"dist/**\", \"build/**\"]\n    }\n  }\n}"
       ;;
     nx)
       warn "nx setup is complex. Follow the official nx init guide."

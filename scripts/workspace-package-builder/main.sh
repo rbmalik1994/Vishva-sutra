@@ -68,17 +68,31 @@ trap on_interrupt INT
 main() {
   info "workspace-package-builder"
 
+  mode_choice=$(choose "What would you like to do?" \
+    "Setup workspace (full setup with config)" \
+    "Create package/app only (skip workspace setup)") || return 1
+
+  case $mode_choice in
+    1) MODE="workspace" ;;
+    2) MODE="package" ;;
+    *) MODE="workspace" ;;
+  esac
+
   WORKSPACE_ROOT=$(prompt_input "Workspace root folder" ".")
   CONFIG_DIR="$WORKSPACE_ROOT/.workspace-builder"
   CONFIG_FILE="$CONFIG_DIR/config"
   export WORKSPACE_ROOT CONFIG_DIR CONFIG_FILE
 
-  if confirm "Initialize workspace at $WORKSPACE_ROOT?" "y"; then
-    init_workspace "$WORKSPACE_ROOT"
-  fi
+  if [ "$MODE" = "workspace" ]; then
+    if confirm "Initialize workspace at $WORKSPACE_ROOT?" "y"; then
+      init_workspace "$WORKSPACE_ROOT"
+    fi
 
-  package_manager_flow
-  monorepo_flow
+    package_manager_flow
+    monorepo_flow
+  else
+    info "Skipping workspace setup (package/app creation mode)"
+  fi
 
   if confirm "Create packages/apps now?" "n"; then
     count=""

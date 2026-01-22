@@ -32,7 +32,7 @@ log_msg() {
   if [ "$QUIET" -eq 1 ] && [ "$level" != "ERROR" ]; then
     return 0
   fi
-  printf "%s%s%s\n" "$color" "$*" "$COLOR_RESET" >&2
+  printf "%b%s%b\n" "$color" "$*" "$COLOR_RESET" >&2
 }
 
 info() { log_msg "INFO" "$COLOR_INFO" "$@"; }

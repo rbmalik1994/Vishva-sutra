@@ -1,6 +1,29 @@
 # Changelog
 
-## [Fixed] - 2026-01-22
+## [Fixed] - 2026-01-22 (Update 2)
+
+### New Features
+
+1. **Added mode selection**
+   - First prompt now asks: "What would you like to do?"
+     - Option 1: Setup workspace (full setup with config)
+     - Option 2: Create package/app only (skip workspace setup)
+   - Allows users to skip workspace initialization and go directly to package creation
+
+### Bug Fixes (Update 2)
+
+1. **Fixed `$schema` variable in turbo.json**
+   - Issue: "schema: parameter not set" error when selecting turbo (option 6)
+   - Cause: Shell was trying to expand `$schema` as a variable
+   - Fix: Properly escaped the dollar sign in the JSON string
+   - Impact: Turbo configuration now works correctly
+
+2. **Fixed JSON/text file formatting**
+   - Changed `printf "%s\n"` to `printf "%b\n"` in write functions
+   - JSON and YAML files now have proper newlines instead of literal `\n`
+   - Impact: All generated config files are properly formatted
+
+## [Fixed] - 2026-01-22 (Update 1)
 
 ### Bug Fixes
 
