@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { ThemeConfig } from '../types';
 
 /**
  * Cyberpunk theme - Neon accents, dark backgrounds, high contrast.
