@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { ThemeConfig } from '../types';
 
 /**
  * Modern theme - Clean, minimal, contemporary design inspired by shadcn/ui.

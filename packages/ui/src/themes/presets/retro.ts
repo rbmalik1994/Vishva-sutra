@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { ThemeConfig } from '../types';
 
 /**
  * Retro theme - GUI/TUI inspired vintage styles with pixel aesthetics.

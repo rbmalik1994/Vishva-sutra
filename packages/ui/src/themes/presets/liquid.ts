@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { ThemeConfig } from '../types';
 
 /**
  * Apple Liquid theme - Translucent, glass-like surfaces with subtle blur effects.

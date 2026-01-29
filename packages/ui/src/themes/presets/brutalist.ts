@@ -1,4 +1,4 @@
-import type { ThemeConfig } from './types';
+import type { ThemeConfig } from '../types';
 
 /**
  * Brutalist theme - Raw, high-contrast, grid-driven layouts with bold typography.

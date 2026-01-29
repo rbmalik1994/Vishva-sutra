@@ -11,5 +11,11 @@
         "statusBarItem.hoverBackground": "#04d6ee",
         "statusBarItem.remoteBackground": "#03a9bc"
     },
-    "peacock.remoteColor": "#03a9bc"
+    "peacock.remoteColor": "#03a9bc",
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /workspaces/Vishva-sutra/packages/ui && pnpm install$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
 }
